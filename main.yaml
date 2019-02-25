@@ -1,0 +1,27 @@
+---
+- hosts: all
+  remote_user: user
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+  - name: Installing nodejs and git
+    apt: name=npm,git state=present
+
+  - name: GIT clone
+    git:
+      repo=git://github.com/marley-nodejs/voting-game
+      dest=/home/user/project1
+      clone=yes
+      force=yes
+
+  - name: NPM NodeJS
+    npm:
+      name='index.js'
+      version='0.0.1'
+      path=/home/user/project1
+      global=true
+      state=present
+    become: yes
+
