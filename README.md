@@ -2,4 +2,4 @@
 
 On Ubuntu only!
 
-ansible-playbook main.yaml --ask-sudo-pass
+ansible-playbook main.yaml -K
