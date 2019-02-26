@@ -1,27 +1,33 @@
 ---
 - hosts: all
   remote_user: user
-  become: yes
-  become_user: root
-  become_method: sudo
 
   tasks:
+
   - name: Installing nodejs and git
+    become: yes
+    become_user: root
+    become_method: sudo
     apt: name=npm,git state=present
 
   - name: GIT clone
     git:
       repo=git://github.com/marley-nodejs/voting-game
-      dest=/home/user/project1
+      dest=/home/user/voting-game4
       clone=yes
       force=yes
 
-  - name: NPM NodeJS
+  - name: Cats app installation
     npm:
-      name='index.js'
-      version='0.0.1'
-      path=/home/user/project1
+      path=/home/user/voting-game4
+
+  - name: Forever installation
+    npm:
+      name=forever
       global=true
       state=present
-    become: yes
+
+  - name: Run cats app as daemon
+    command: forever start --minUptime 1000 --spinSleepTime 1000 /home/user/voting-game4/index.js
+    register: something
 
