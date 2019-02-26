@@ -1,6 +1,6 @@
 # cats_app_ansible
 
-On Ubuntu only! Do not work wit CentOS.
+On Ubuntu only! Do not work on CentOS.
 
 Using this ansible script you will be able to implement Cats_app on any number of slave Virtual Mashines.
 
