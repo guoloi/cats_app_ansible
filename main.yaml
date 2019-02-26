@@ -13,21 +13,24 @@
   - name: GIT clone
     git:
       repo=git://github.com/marley-nodejs/voting-game
-      dest=/home/user/voting-game4
+      dest=/home/user/voting-game
       clone=yes
       force=yes
 
   - name: Cats app installation
     npm:
-      path=/home/user/voting-game4
+      path=/home/user/voting-game
 
   - name: Forever installation
+    become: yes
+    become_user: root
+    become_method: sudo
     npm:
       name=forever
       global=true
       state=present
 
   - name: Run cats app as daemon
-    command: forever start --minUptime 1000 --spinSleepTime 1000 /home/user/voting-game4/index.js
+    command: forever start --minUptime 1000 --spinSleepTime 1000 /home/user/voting-game/index.js
     register: something
 
