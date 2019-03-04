@@ -30,15 +30,16 @@ ansible-playbook main.yaml -K
 
 # Развертывание приложения (написано Marley). Тестировалось в ubuntu linux 18.04.
 
-1. Установить vagrant
-   https://www.vagrantup.com/
+1.  Установить vagrant
+    https://www.vagrantup.com/
 
-   \$ vagrant plugin install vagrant-hosts
+    \$ vagrant plugin install vagrant-hosts
 
 2)
 
     $ cd ~
     $ git clone --depth=1 https://github.com/guoloi/cats_app_ansible
+    $ cd cats_app_ansible/vm/
     $ ssh-add ~/.vagrant.d/insecure_private_key
     $ vagrant up
 
@@ -73,10 +74,15 @@ ansible-playbook main.yaml -K
 
     server
 
+<br/>
+
     # su - user
 
     $ ssh-keygen -t rsa
     $ ssh-copy-id user@server
+
+    // Устанавливаем python 2.x на сервер
+    $ ssh -tt server "sudo apt install -y python"
 
     $ cd ~
     $ git clone --depth=1 https://github.com/guoloi/cats_app_ansible
@@ -85,12 +91,14 @@ ansible-playbook main.yaml -K
 
 http://192.168.56.102:8080/
 
-Все хорошо
+<br/>
+
+![Application](/img/cat.png?raw=true)
 
 <br/>
 
 # TODO: Что нужно сделать!
 
-- передавать адрес сервера на котором должно разворачиваться приложение в командной строке
+- Передавать адрес сервера на котором должно разворачиваться приложение в командной строке
 - Nginx как прокси сервер приложения, работающий на 80 порту.
 - Сообщение о результатах деплоя в slack и телеграм.
