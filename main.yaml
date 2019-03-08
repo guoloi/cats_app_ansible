@@ -16,8 +16,9 @@
   tasks:
 
   - name: Add SSH authorized key for user user copying it from current user
-    user: user
-    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+    authorized_key:
+      user: user
+      key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
 
   - name: Installing nodejs and git
     become: yes
