@@ -1,36 +1,51 @@
 ---
 - hosts: all
+  gather_facts: no
   remote_user: user
+
+  pre_tasks:
+
+  - name: Ensure python 2.7 is present
+    become: yes
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+    register: output
+    changed_when:
+      - output.stdout != ""
+      - output.stdout != "\r\n"
 
   tasks:
 
+  - name: Add SSH authorized key for user user copying it from current user
+    user: user
+    key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
   - name: Installing nodejs and git
     become: yes
-    become_user: root
-    become_method: sudo
-    apt: name=npm,git state=present
+    apt: 
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - npm
+      - git
 
   - name: GIT clone
     git:
-      repo=git://github.com/marley-nodejs/voting-game
-      dest=/home/user/voting-game
-      clone=yes
-      force=yes
+      repo: git://github.com/marley-nodejs/voting-game
+      dest: /home/user/voting-game
+      clone: yes
+      force: yes
 
   - name: Cats app installation
     npm:
-      path=/home/user/voting-game
+      path: /home/user/voting-game
 
   - name: Forever installation
     become: yes
-    become_user: root
-    become_method: sudo
     npm:
-      name=forever
-      global=true
-      state=present
+      name: forever
+      global: true
+      state: present
 
   - name: Run cats app as daemon
     command: forever start --minUptime 1000 --spinSleepTime 1000 /home/user/voting-game/index.js
     register: something
-
