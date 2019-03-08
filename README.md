@@ -6,13 +6,11 @@ Using this ansible script you will be able to implement Cats_app on any number o
 
 I suppose that:
 
-1. Every VM have Python 2.7 installed (apt install python)
-2. There is user "user" on every Slave VM, which is able to escalate privileges using "sudo" command
-3. Management VM has ssh access to every Slave VM by key (ssh-copy-id user@Slave_VM_IP)
-4. On Management VM ansible is installed (apt install ansible)
-5. In case of reboot you have to run script again, or start cats_app manualy
+1. There is user "user" on every Slave VM, which is able to escalate privileges using "sudo" command
+2. On Management VM ansible is installed (apt install ansible)
+3. In case of reboot you have to run script again, or start cats_app manualy
 
-This script DO NOT install virtual mashines!
+This script DO NOT install virtual machines!
 
 # Management VM:
 
@@ -79,7 +77,6 @@ ansible-playbook main.yaml -K
     # su - user
 
     $ ssh-keygen -t rsa
-    $ ssh-copy-id user@server
 
     // Устанавливаем python 2.x на сервер
     $ ssh -tt server "sudo apt install -y python"
