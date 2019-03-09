@@ -22,11 +22,14 @@ ubuntu-18.04.2
 
 # Command to run script:
 
-ansible-playbook main.yaml -K
+    $ ansible-playbook playbook.yaml -K
 
 <br/>
 
 # Развертывание приложения (написано Marley). Тестировалось в ubuntu linux 18.04.
+
+Controller - хост с которого запускаем ansible скрипты.  
+Node - узел, на котором запускается приложение.
 
 1.  Установить vagrant
     https://www.vagrantup.com/
@@ -39,54 +42,65 @@ ansible-playbook main.yaml -K
     $ git clone --depth=1 https://github.com/guoloi/cats_app_ansible
     $ cd cats_app_ansible/vm/
     $ ssh-add ~/.vagrant.d/insecure_private_key
+    $ vagrant box update
     $ vagrant up
 
 3)
 
 Двумя сессиями подключиться к созданным виртуальным машинам:
 
-    $ vagrant ssh client
-    $ vagrant ssh server
+    $ vagrant ssh controller
+    $ vagrant ssh node
 
 <br/>
 
-### Client и Server
+### Controller и Node
 
     $ sudo su  -
-    # adduser --disabled-password --gecos "" user
-    # usermod -aG sudo user
-    # passwd user
+    # adduser --disabled-password --gecos "" ansible
+    # usermod -aG sudo ansible
+    # passwd ansible
 
-    vi /etc/ssh/sshd_config
+    # vi /etc/ssh/sshd_config
     PasswordAuthentication yes
 
     # service sshd reload
 
 <br/>
 
-### Client
+### Controller
 
     # vi /etc/ansible/hosts
 
 добавить ip или достаточно hostname
 
-    server
+    node
 
 <br/>
 
-    # su - user
+    # su - ansible
 
-    $ ssh-keygen -t rsa
+    $ ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -q -N ""
+
+    $ ssh-copy-id ansible@node
+
+    // Проверка подключения без ввода пароля
+    $ ssh ansible@node
+    exit
 
     // Устанавливаем python 2.x на сервер
-    $ ssh -tt server "sudo apt install -y python"
+    // $ ssh -tt server "sudo apt install -y python"
 
     $ cd ~
     $ git clone --depth=1 https://github.com/guoloi/cats_app_ansible
     $ cd cats_app_ansible/
-    $ ansible-playbook main.yaml -K
+    $ ansible-playbook playbook.yaml -K
 
-http://192.168.56.102:8080/
+<br/>
+
+nginx - http://192.168.56.102:80/
+
+node - http://192.168.56.102:8080/
 
 <br/>
 
@@ -97,5 +111,5 @@ http://192.168.56.102:8080/
 # TODO: Что нужно сделать!
 
 - Передавать адрес сервера на котором должно разворачиваться приложение в командной строке
-- Nginx как прокси сервер приложения, работающий на 80 порту.
 - Сообщение о результатах деплоя в slack и телеграм.
+- Nginx должен работать по https
